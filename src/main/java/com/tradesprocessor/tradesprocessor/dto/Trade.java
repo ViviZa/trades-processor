@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class Trade {
 
-    @JsonProperty("ALL_TRADE_DB_ID")
+    @JsonProperty("trade_id")
     private long tradeID;
 
-    @JsonProperty("PRICE")
+    @JsonProperty("price")
     private double price;
 
 }
