@@ -4,10 +4,11 @@ import com.tradesprocessor.tradesprocessor.dto.Trade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 @Slf4j
@@ -17,9 +18,10 @@ public class TradeProducerService {
     private KafkaTemplate<String, Trade> kafkaTemplate;
 
     public void sendMessage(final Trade trade) {
-        final Message<Trade> message = MessageBuilder.withPayload(trade).setHeader(KafkaHeaders.TOPIC, "test-topic").setHeader(KafkaHeaders.PARTITION_ID, 1)
-                .build();
-        log.info("Sending trade");
-        this.kafkaTemplate.send(message);
+        try {
+            this.kafkaTemplate.send("test-topic", String.valueOf(trade.getTradeID()), trade).get(5, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            log.warn("Error sending trade!", e);
+        }
     }
 }
