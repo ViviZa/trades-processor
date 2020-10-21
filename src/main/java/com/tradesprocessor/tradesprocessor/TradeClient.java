@@ -40,7 +40,7 @@ public class TradeClient {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
 
-        final InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("all-trades.json");
+        final InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("trades.json");
         try {
             final String jsonString = IOUtils.toString(inputStream);
             final Trade[] tradeArray = objectMapper.readValue(jsonString, Trade[].class);
