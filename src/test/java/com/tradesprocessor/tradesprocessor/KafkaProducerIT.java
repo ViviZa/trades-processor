@@ -21,13 +21,10 @@ public class KafkaProducerIT extends IntegrationTestConfigWithPortAndTestProfile
         // given
         initTestQueueReceiverForTopic("test-topic");
 
-        // when
-        tradeClient.createTradeData();
-
         //then
         Awaitility.await()
                 .atMost(Duration.ofSeconds(10)).pollDelay(Duration.ofMillis(100)).untilAsserted(() -> {
-                    assertThat(records).hasSize(6);
+                    assertThat(records).hasSize(5);
                 }
         );
     }
